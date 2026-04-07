@@ -3,14 +3,18 @@ FROM python:3.10-slim
 # Set working directory
 WORKDIR /app
 
-# Copy only Django project
-COPY app/ .
+COPY requirements.txt .
+COPY devops .
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y python3-pip
 
-# Expose port
+RUN pip install -r requirements.txt
+
+COPY devops .
+
 EXPOSE 8000
 
-# Run Django
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT [ "python3" ]
+CMD [ "manage.py", "runserver", "0.0.0.0:8000" ]
+
+
